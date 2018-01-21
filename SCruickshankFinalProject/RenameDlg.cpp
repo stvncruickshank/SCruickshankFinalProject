@@ -34,12 +34,8 @@ BEGIN_MESSAGE_MAP(RenameDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// RenameDlg message handlers
-
-
 void RenameDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
 	m_eOldPath.GetWindowTextA(tempA);
 	m_eNewPath.GetWindowTextA(tempB);
 	CDialogEx::OnOK();
@@ -48,6 +44,5 @@ void RenameDlg::OnBnClickedOk()
 
 void RenameDlg::OnBnClickedCancel()
 {
-	// TODO: Add your control notification handler code here
 	CDialogEx::OnCancel();
 }

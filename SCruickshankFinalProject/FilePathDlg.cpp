@@ -34,20 +34,16 @@ BEGIN_MESSAGE_MAP(FilePathDlg, CDialogEx)
 	ON_BN_CLICKED(IDCANCEL, &FilePathDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
-
-// FilePathDlg message handlers
-
-
+//on ok button clicked 
 void FilePathDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
 	m_FilePath.GetWindowTextA(tempCString);
 	
 	EndDialog(0);
 	CDialogEx::OnOK();
 }
 
-
+//if clicked cancel
 void FilePathDlg::OnBnClickedCancel()
 {
 	EndDialog(0);

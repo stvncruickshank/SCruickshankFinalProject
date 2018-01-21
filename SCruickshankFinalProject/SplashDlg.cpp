@@ -35,12 +35,8 @@ BEGIN_MESSAGE_MAP(SplashDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// SplashDlg message handlers
-
-
 void SplashDlg::EnterWindows()
 {
-	// TODO: Add your control notification handler code here
 	CDialogEx::OnOK();
 }
 

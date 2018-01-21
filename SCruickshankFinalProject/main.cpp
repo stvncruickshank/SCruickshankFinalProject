@@ -30,35 +30,39 @@
 
 #pragma comment(lib, "User32.lib")
 
-#define IDC_EDIT 500
+#define IDR_MENU1                       101
+#define IDD_FILEPATH                    102
+#define IDD_RENAME                      108
+#define IDR_ACC1                        110
 #define IDD_SPLASH                      115
 #define IDD_DIALOG1                     123
-
-#define IDR_MENU1                       101
-#define IDD_RENAME                      108
+#define IDC_EDIT						500
+#define ID_FILE_SAVE                    40002
 #define ID_FILE_QUIT                    40004
-#define ID_EDIT_CLEAR                   40014
 #define ID_EDIT_CUT                     40005
 #define ID_DIRECTORYTOOLS_MAKEDIRECTORY 40008
 #define ID_DIRECTORYTOOLS_REMOVEDIRECTORY 40009
-#define ID_DIRECTORYTOOLS_LISTFILESINDIRECTORY 40019
-#define ID_FILE_SAVE                    40002
-#define ID_ABOUT_DATE                   40013
 #define ID_ABOUT_ABOUT                  40012
+#define ID_ABOUT_DATE                   40013
+#define ID_EDIT_CLEAR                   40014
 #define ID_DIRECTORYTOOLS_SETCURRENTDIR 40015
 #define ID_DIRECTORYTOOLS_GETCURRENTDIR 40016
-#define IDD_FILEPATH                    102
 #define ID_DIRECTORYTOOLS_COPYDIRECTORY 40017
 #define ID_DIRECTORYTOOLS_RENAMEDIRECTORY 40018
+#define ID_DIRECTORYTOOLS_LISTFILESINDIRECTORY 40019
 #define ID_DIRECTORYTOOLS_CHANGEFILEATTRIBS 40020
 #define ID_DIRECTORYTOOLS_DIR           40021
 #define ID_DIRECTORYTOOLS_COPYDIRECTORY40022 40022
-#define IDR_ACC1                        110
 #define ID_EDIT_DELETE                  40054
 #define ID_EDIT_UNDO                    40055
 
 
 
+
+
+
+
+//dialog extension filter
 const char fileDialogFilter[] ="C++ Files (*.cpp) | *.cpp|Header Files\(.*h)|*.h|Resource Files (*.rc)|*.rc|Text Files(*.txt)|*.txt| All Files(*.*) | *> * || ";
 const char fileDialogExt[] = "cpp";
 
@@ -69,7 +73,6 @@ CRect rect;
 
 
 void RecursiveDelete(CString);
-
 
 
 //App Obj
@@ -89,6 +92,7 @@ private:
 public:
 	CWindow();
 
+	//handlers
 	afx_msg void HandleClear();
 	afx_msg void HandleQuit();
 	afx_msg void HandleCut();
@@ -135,8 +139,8 @@ CWindow::CWindow()
 		
 	}
 	
-
-		Create(NULL, "~*WINDOWS MANIA*~", WS_OVERLAPPED | WS_SYSMENU, rectDefault);
+	//create the window, and set the menu 
+		Create(NULL, "~WINDOWS MANIA~", WS_OVERLAPPED | WS_SYSMENU, rectDefault);
 		menu = new CMenu();
 		menu->LoadMenu(IDR_MENU1);
 		SetMenu(menu);
@@ -192,8 +196,9 @@ BEGIN_MESSAGE_MAP(CWindow, CFrameWnd)
 END_MESSAGE_MAP()
 
 
-void CWindow::HandleClear() //WORKS PERF
+void CWindow::HandleClear() 
 {
+	//clear out the editor window
 	UINT length = m_edit.GetWindowTextLengthA();
 	if (length > 0)
 	{
@@ -207,7 +212,8 @@ void CWindow::HandleClear() //WORKS PERF
 	}
 }
 
-void CWindow::HandleQuit() //WORKS PERF
+//quit the program
+void CWindow::HandleQuit() 
 {
 	const int result = MessageBox("WARNING!!\nAre you sure you want to quit?", "CAUTION", MB_ICONQUESTION|MB_YESNO);
 	if (result == IDYES)
@@ -217,16 +223,16 @@ void CWindow::HandleQuit() //WORKS PERF
 
 }
 
-
-void CWindow::HandleCut() //PERF
+// "cut" function
+void CWindow::HandleCut() 
 {
 	m_edit.Cut();
 	m_edit.SetFocus();
 
 }
 
-
-void CWindow::HandleMkDir() //WORKS PERF!!!
+//make directory
+void CWindow::HandleMkDir() 
 {
 	FilePathDlg dlg;
 	CString to;
@@ -258,8 +264,8 @@ void CWindow::HandleMkDir() //WORKS PERF!!!
 
 }
 
-
-void CWindow::HandleSave() //WORKS PERF!!!
+//save the text in the editor
+void CWindow::HandleSave() 
 {
 	CFile file;
 	static CString filePathName;
@@ -299,8 +305,8 @@ void CWindow::HandleSave() //WORKS PERF!!!
 	m_edit.SetFocus();
 }
 
-
-void CWindow::HandleDateTime() //WORKS PERF
+//date and time
+void CWindow::HandleDateTime() 
 {
 	CTime t;
 	t =CTime::GetCurrentTime();
@@ -310,15 +316,16 @@ void CWindow::HandleDateTime() //WORKS PERF
 
 }
 
-
-void CWindow::HandleAbout() //WORKS PERF
+//the about window
+void CWindow::HandleAbout() 
 {
 	AboutDlg dlg;
 	if (dlg.DoModal() == ID_ABOUT_ABOUT) {};
 	m_edit.SetFocus();
 }
 
-void CWindow::OnRemoveDirectory() //WORKS PERF
+//remove the directory
+void CWindow::OnRemoveDirectory() 
 {
 	CFile file;
 	FilePathDlg dlg;
@@ -341,6 +348,7 @@ void CWindow::OnRemoveDirectory() //WORKS PERF
 
 }
 
+//deletes all directories/subdirectories
 void RecursiveDelete(CString szPath)
 {
 	CFileFind ff;
@@ -376,7 +384,8 @@ void RecursiveDelete(CString szPath)
 
 }
 
-void CWindow::SetDirectory() //WORKS PERF
+//set which directory you'd like to perform an action on
+void CWindow::SetDirectory() 
 {
 	FilePathDlg dlg;
 	if (dlg.DoModal()==ID_DIRECTORYTOOLS_SETCURRENTDIR)
@@ -396,8 +405,8 @@ void CWindow::SetDirectory() //WORKS PERF
 
 }
 
-
-void CWindow::GetDirectory() //WORKS PERF
+//in case you forget which directory you had selected
+void CWindow::GetDirectory() 
 {
 	CString curDir; 
 	GetCurrentDirectory(MAX_PATH, curDir.GetBufferSetLength(MAX_PATH)); 
@@ -407,11 +416,8 @@ void CWindow::GetDirectory() //WORKS PERF
 
 }
 
-
-
-
-
-void CWindow::OnMoveDir() //WORKS PERF
+//Move directory
+void CWindow::OnMoveDir() 
 {
 	MoveDirDlg dlg;
 	if (dlg.DoModal() == ID_DIRECTORYTOOLS_COPYDIRECTORY)
@@ -457,8 +463,8 @@ void CWindow::OnMoveDir() //WORKS PERF
 
 	}
 
-
-void CWindow::renameDir() //WORKS PERF
+//rename the directory
+void CWindow::renameDir() 
 {
 
 	RenameDlg dlg;
@@ -492,9 +498,9 @@ void CWindow::renameDir() //WORKS PERF
 
 }
 
-void CWindow::OnListFiles() // WORKS PERF
+//list files/directories in directory
+void CWindow::OnListFiles()
 {
-	// TODO: Add your command handler code here
 	WIN32_FIND_DATA ffd;
 	LARGE_INTEGER filesize;
 	TCHAR szDir[MAX_PATH];
@@ -533,7 +539,7 @@ void CWindow::OnListFiles() // WORKS PERF
 		MessageBox("Root directory doesnt exist!", "Directory not found!", MB_ICONERROR | MB_OK);
 	}
 
-	//list all files in the direct!
+	//list all files in the directory!
 	do
 	{
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -567,10 +573,9 @@ void CWindow::OnListFiles() // WORKS PERF
 }
 
 
-//WORKS PERF
+//change attributes of a file
 void CWindow::OnAttribChange()
 {
-	// TODO: Add your command handler code here
 	AttribDlg dlg;
 
 	if (dlg.DoModal() == IDD_ATTRIB)
@@ -587,7 +592,6 @@ void CWindow::OnAttribChange()
 	if (strlen(pathName) > 1) {
 		if (dlg.readonly == BST_CHECKED && dlg.normal == BST_UNCHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_READONLY);
 			m_edit.SetFocus();
 
@@ -596,7 +600,6 @@ void CWindow::OnAttribChange()
 		//ARCHIVE
 		else if (dlg.archive == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_ARCHIVE);
 			m_edit.SetFocus();
 
@@ -605,8 +608,6 @@ void CWindow::OnAttribChange()
 		//NORMAL
 		else if (dlg.normal == BST_CHECKED)
 		{
-
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_NORMAL);
 			m_edit.SetFocus();
 
@@ -615,7 +616,6 @@ void CWindow::OnAttribChange()
 		//offline
 		else if (dlg.offline == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_OFFLINE);
 			m_edit.SetFocus();
 
@@ -624,7 +624,6 @@ void CWindow::OnAttribChange()
 		//SYSTEM
 		else if (dlg.system == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_SYSTEM);
 			m_edit.SetFocus();
 
@@ -633,7 +632,6 @@ void CWindow::OnAttribChange()
 		//TEMPORARY
 		else if (dlg.temp == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_TEMPORARY);
 			m_edit.SetFocus();
 
@@ -642,7 +640,6 @@ void CWindow::OnAttribChange()
 		//NON INDEXED
 		else if (dlg.indexed == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_NOT_CONTENT_INDEXED);
 			m_edit.SetFocus();
 
@@ -652,7 +649,6 @@ void CWindow::OnAttribChange()
 		//COMPRESS
 		else if (dlg.compress == BST_CHECKED)
 		{
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_COMPRESSED);
 			m_edit.SetFocus();
 
@@ -661,7 +657,6 @@ void CWindow::OnAttribChange()
 		else if (dlg.hidden == BST_CHECKED)
 		{
 
-			//m_edit.SetWindowTextA(_T("Checked"));
 			SetFileAttributes(pathName, FILE_ATTRIBUTE_HIDDEN);
 			m_edit.SetFocus();
 
@@ -669,10 +664,9 @@ void CWindow::OnAttribChange()
 	}
 }
 
-
-void CWindow::OnGamesHenway() //WORKS PERF
+//launches included .exe Henway
+void CWindow::OnGamesHenway() 
 {
-	// TODO: Add your command handler code here
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 
@@ -701,10 +695,9 @@ void CWindow::OnGamesHenway() //WORKS PERF
 
 }
 
-
-void CWindow::OnGamesOfficemadness() //WORKS PERF
+//launches .exe Henway
+void CWindow::OnGamesOfficemadness() 
 {
-	// TODO: Add your command handler code here
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 
@@ -733,10 +726,9 @@ void CWindow::OnGamesOfficemadness() //WORKS PERF
 
 
 
-
-void CWindow::OnFilesInDir() //WORKS PERF
+//launches WinDir.exe
+void CWindow::OnFilesInDir() 
 {
-	// TODO: Add your command handler code here
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 	
@@ -763,10 +755,9 @@ void CWindow::OnFilesInDir() //WORKS PERF
 	}
 }
 
-
-void CWindow::OnFileOpen()//WORKS PERF
+//open file to editor
+void CWindow::OnFileOpen()
 {
-	// TODO: Add your command handler code here
 	char s[200];
 	CFile filePath;
 	static CString filePathName;
@@ -805,10 +796,9 @@ void CWindow::OnFileOpen()//WORKS PERF
 
 }
 
-
-void CWindow::OnCopyDir() //WORKS PERF
+//Copy directory
+void CWindow::OnCopyDir() 
 {
-	// TODO: Add your command handler code here
 	MoveDirDlg dlg;
 	if (dlg.DoModal() == ID_DIRECTORYTOOLS_COPYDIRECTORY40022)
 	{
@@ -855,10 +845,13 @@ void CWindow::OnCopyDir() //WORKS PERF
 
 void CWindow::OnPrint()
 {
-	std::ofstream printer("\\\\cts-fp.bhcc.dom\\D119");
+	//your printer communications may vary
+
+	/*
+	std::ofstream printer("***");
 
 	#define COMPRESS "\x1b(s16.5H"
-	#define LANDSCAPE "\x1b&l1O" //\x1b&l1O ONLY LOOK AT &l1O portion 
+	#define LANDSCAPE "\x1b&l1O" 
 	#define PORTRAIT "\x1b&l0O"
 	#define DUPLEX "\x1b&l1S"
 	#define GREYSCALE "\x1b*c2P"
@@ -912,24 +905,24 @@ void CWindow::OnPrint()
 	}
 
 	m_edit.SetFocus();
-
+	*/
 }
 
-
+//delete in editor
 void CWindow::OnEditDelete()
 {
 	m_edit.ReplaceSel("");
 	m_edit.SetFocus();
 }
 
-
+//undo in editor
 void CWindow::OnEditUndo()
 {
 	m_edit.Undo();
 	m_edit.SetFocus();
 }
 
-
+//paste in editor
 void CWindow::OnEditPaste()
 {
 	m_edit.Paste();
@@ -937,7 +930,7 @@ void CWindow::OnEditPaste()
 
 }
 
-
+//copy in editor
 void CWindow::OnEditCopy()
 {
 	m_edit.Copy();

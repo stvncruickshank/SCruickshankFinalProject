@@ -23,6 +23,8 @@ AttribDlg::~AttribDlg()
 
 void AttribDlg::DoDataExchange(CDataExchange* pDX)
 {
+
+	//controls data being passed
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_ARCHIVE, m_rArchive);
 	DDX_Control(pDX, IDC_COMPRESSED, m_rCompress);
@@ -38,7 +40,7 @@ void AttribDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_TEMP, m_rTemp);
 }
 
-
+//event handlers
 BEGIN_MESSAGE_MAP(AttribDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &AttribDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &AttribDlg::OnBnClickedCancel)
@@ -46,14 +48,12 @@ BEGIN_MESSAGE_MAP(AttribDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// AttribDlg message handlers
-
-
 void AttribDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
 	m_ePath.GetWindowTextA(tempA);
 
+	//Set each radiobutton to its matching ID
+	//then sets its checked value to an int
 	CButton *m_ctlCheckArchive = (CButton*)GetDlgItem(IDC_ARCHIVE);
 	archive = m_ctlCheckArchive->GetCheck();
 
@@ -87,18 +87,11 @@ void AttribDlg::OnBnClickedOk()
 
 void AttribDlg::OnBnClickedCancel()
 {
-	// TODO: Add your control notification handler code here
-	
 	CDialogEx::OnCancel();
 }
 
 
 void AttribDlg::OnEnChangeEdit3()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
 
-	// TODO:  Add your control notification handler code here
 }
